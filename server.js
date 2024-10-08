@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-
 import cors from 'cors';
 import sequelize from './models/index.js';
+import templateRoutes from './routes/template.js';
+import formRoutes from './routes/form.js';
 
 dotenv.config();
 
@@ -17,12 +18,14 @@ app.use(cors({
 
 app.use(express.json());
 
+app.use('/api', templateRoutes);
+app.use('/api', formRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend is running for customizable-forms');
 });
 
-sequelize.sync().then(() => {
+sequelize.sync({ alter: true }).then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
     });
